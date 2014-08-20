@@ -45,6 +45,15 @@ void args_execute(int argc, char* argv[])
         }
     }
 
+    /* Use a default PPD file if not specified */
+    if (!definition) {
+        definition = g_strdup_printf("/usr/share/cups/model/%s.ppd");
+    }
+
+    if (!g_file_test(definition, G_FILE_TEST_EXISTS)) {
+        g_error("PPD file could not be located: %s");
+    }
+
     /* Concatenate remaining argument as a single string to feed brprintconfig */
     if (remaining != NULL) {
         commandline = g_strjoinv(" ", remaining);
